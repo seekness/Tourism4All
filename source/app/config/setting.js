@@ -5,7 +5,7 @@ export const BaseSetting = {
   name: 'listar',
   displayName: 'Listar',
   appVersion: '1.0.4',
-  domain: 'listarapp.com',
+  domain: 'tourism4all.aktuelnosti.net',
   protocol: 'https',
   defaultLanguage: 'sr',
   languageSupport: [

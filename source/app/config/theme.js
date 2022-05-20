@@ -173,14 +173,14 @@ export const ThemeSupport = [
  * Define default theme use for whole application
  */
 export const DefaultTheme = {
-  theme: 'orange',
+  theme: 'blue',
   light: {
     dark: false,
     colors: {
-      primary: '#E5634D',
-      primaryDark: '#C31C0D',
-      primaryLight: '#FF8A65',
-      accent: '#4A90A4',
+      primary: '#5DADE2',
+      primaryDark: '#1281ac',
+      primaryLight: '#68c9ef',
+      accent: '#FF8A65',
       background: 'white',
       card: '#F5F5F5',
       text: '#212121',
@@ -190,10 +190,10 @@ export const DefaultTheme = {
   dark: {
     dark: true,
     colors: {
-      primary: '#E5634D',
-      primaryDark: '#C31C0D',
-      primaryLight: '#FF8A65',
-      accent: '#4A90A4',
+      primary: '#5DADE2',
+      primaryDark: '#1281ac',
+      primaryLight: '#68c9ef',
+      accent: '#FF8A65',
       background: '#010101',
       card: '#121212',
       text: '#e5e5e7',

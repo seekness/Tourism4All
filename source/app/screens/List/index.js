@@ -547,7 +547,7 @@ export default function List({navigation, route}) {
                   block
                   image={item.image?.full}
                   title={item.title}
-                  subtitle={item.category?.title}
+                  subtitle={t(item.category?.title)}
                   location={item.address}
                   phone={item.phone}
                   rate={item.rate}
@@ -629,7 +629,7 @@ export default function List({navigation, route}) {
                   grid
                   image={item.image?.full}
                   title={item.title}
-                  subtitle={item.category?.title}
+                  subtitle={t(item.category?.title)}
                   location={item.address}
                   phone={item.phone}
                   rate={item.rate}
@@ -713,7 +713,7 @@ export default function List({navigation, route}) {
                   list
                   image={item.image?.full}
                   title={item.title}
-                  subtitle={item.category?.title}
+                  subtitle={t(item.category?.title)}
                   location={item.address}
                   phone={item.phone}
                   rate={item.rate}
@@ -879,7 +879,7 @@ export default function List({navigation, route}) {
                 small
                 image={item.image?.full}
                 title={item.title}
-                subtitle={item.category?.title}
+                subtitle={t(item.category?.title)}
                 rate={item.rate}
                 favorite={item.favorite}
                 style={{
@@ -956,7 +956,7 @@ export default function List({navigation, route}) {
     <SafeAreaView style={BaseStyle.safeAreaView} edges={['right', 'left']}>
       <Header
         title={
-          filter?.category?.[0]?.title || filter?.area?.title || t('place')
+          t(filter?.category?.[0]?.title) || t(filter?.area?.title) || t('place')
         }
         renderLeft={() => {
           return (

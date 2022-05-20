@@ -115,7 +115,7 @@ export default function Category({navigation}) {
           <CategoryIcon
             icon={Utils.iconConvert(item.icon)}
             color={item.color}
-            title={item.title}
+            title={t(item.title)}
             subtitle={item.count.toString()}
             onPress={() => {
               const filter = new FilterModel();
@@ -142,7 +142,7 @@ export default function Category({navigation}) {
             image={item.image?.full}
             color={item.color}
             icon={Utils.iconConvert(item.icon)}
-            title={item.title}
+            title={t(item.title)}
             subtitle={item.count.toString()}
             onPress={() => {
               const filter = new FilterModel();

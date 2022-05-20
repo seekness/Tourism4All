@@ -241,7 +241,7 @@ export default function Home({navigation}) {
             key={`recent${item.id}`}
             image={item.image?.full}
             title={item.title}
-            subtitle={item.category?.title}
+            subtitle={t(item.category?.title)}
             rate={item.rate}
             style={{marginBottom: 15}}
             onPress={() => {

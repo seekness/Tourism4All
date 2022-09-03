@@ -86,9 +86,9 @@ export default function PreviewImage({navigation, route}) {
           paddingVertical: 10,
         }}>
         <View style={styles.lineText}>
-          <Text body2 whiteColor>
+          {/* <Text body2 whiteColor>
             Standard Double Room
-          </Text>
+          </Text> */}
           <Text body2 whiteColor>
             {indexSelected + 1}/{images.length}
           </Text>

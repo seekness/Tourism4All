@@ -956,7 +956,7 @@ export default function List({navigation, route}) {
     <SafeAreaView style={BaseStyle.safeAreaView} edges={['right', 'left']}>
       <Header
         title={
-          t(filter?.category?.[0]?.title) || t(filter?.area?.title) || t('place')
+          t(filter?.category?.[0]?.title) || filter?.area?.title || t('place')
         }
         renderLeft={() => {
           return (

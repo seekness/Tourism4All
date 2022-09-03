@@ -81,7 +81,7 @@ export const languageFromCode = code => {
     case 'vi':
       return 'Vietnamese';
     case 'sr':
-      return 'Srpski';
+      return 'Serbian';
     case 'hu':
       return 'Hungarian';
     case 'ar':

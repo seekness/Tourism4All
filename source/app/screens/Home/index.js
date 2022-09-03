@@ -13,8 +13,9 @@ import {
   Progressive,
   PlaceholderMedia,
 } from 'rn-placeholder';
+import {TourData} from '@data';
 import {Image, Text, Icon, Card, SafeAreaView, ListItem} from '@components';
-import {BaseStyle, BaseColor, useTheme} from '@config';
+import {BaseStyle, Images, BaseColor, useTheme} from '@config';
 import * as Utils from '@utils';
 import styles from './styles';
 import Swiper from 'react-native-swiper';
@@ -29,6 +30,7 @@ export default function Home({navigation}) {
   const {colors} = useTheme();
   const {t} = useTranslation();
   const dispatch = useDispatch();
+  const [tours] = useState(TourData);
   const setting = useSelector(settingSelect);
   const home = useSelector(homeSelect);
   const [heightHeader, setHeightHeader] = useState(Utils.heightHeader());
@@ -156,7 +158,7 @@ export default function Home({navigation}) {
                 width: (Utils.getWidthDevice() - 40) * 0.25,
                 marginBottom: 8,
               }}
-              key={`category${item}`}>
+              key={t(`category${item}`)}>
               <Placeholder Animation={Progressive}>
                 <View style={{alignItems: 'center'}}>
                   <PlaceholderMedia style={styles.serviceCircleIcon} />
@@ -359,6 +361,20 @@ export default function Home({navigation}) {
               {t('recent_sologan')}
             </Text>
             {renderRecent()}
+          </View>
+
+
+
+          {/* Promotion */}
+          <View style={styles.contentPopular}>
+            <Text title3 semibold>
+              {t('banner')}
+            </Text>
+            <Text body2 grayColor>
+              {t('let_find_promotion')}
+            </Text>
+            <Image source={require('@assets/images/interreg.png')} style={styles.promotionBanner} />
+            <View style={[styles.line, {backgroundColor: colors.border}]} />
           </View>
         </ScrollView>
       </SafeAreaView>

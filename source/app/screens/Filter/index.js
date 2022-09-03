@@ -158,7 +158,7 @@ export default function Filter({navigation, route}) {
                     marginRight: 8,
                   }}
                   onPress={() => onSelectCategory(item)}>
-                  {item.title}
+                  {t(item.title)}
                 </Tag>
               );
             })}
@@ -188,7 +188,7 @@ export default function Filter({navigation, route}) {
                     marginRight: 8,
                     borderColor: selected ? colors.primary : colors.accent,
                   }}>
-                  {item.title}
+                  {t(item.title)}
                 </Tag>
               );
             })}

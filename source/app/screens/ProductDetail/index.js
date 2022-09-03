@@ -273,7 +273,7 @@ export default function ProductDetail({navigation, route}) {
               outputRange: [1, 0, 0],
             }),
           }}>
-          <Image
+          {/* <Image
             source={{uri: product?.author?.image}}
             style={styles.userIcon}
           />
@@ -284,7 +284,7 @@ export default function ProductDetail({navigation, route}) {
             <Text footnote whiteColor>
               {product?.author?.email}
             </Text>
-          </View>
+          </View> */}
         </Animated.View>
       </Animated.View>
     );
@@ -389,12 +389,18 @@ export default function ProductDetail({navigation, route}) {
           <View style={styles.lineSpace}>
             <View>
               <Text caption1 grayColor>
-                {product?.category?.title}
+                {t(product?.category?.title)}
               </Text>
               <TouchableOpacity style={styles.rateLine} onPress={onReview}>
+                {product?.rate != ''?
                 <Tag rateSmall style={{marginRight: 5}} onPress={onReview}>
                   {product?.rate}
                 </Tag>
+                : 
+                <Tag rateSmall style={{marginRight: 5}} onPress={onReview}>
+                  0.0
+                </Tag>
+                }
                 <StarRating
                   disabled={true}
                   starSize={10}
@@ -408,8 +414,11 @@ export default function ProductDetail({navigation, route}) {
                 </Text>
               </TouchableOpacity>
             </View>
+            {product?.status != ''?
             <Tag status>{product?.status}</Tag>
+            : null}
           </View>
+          {product?.address != ''?
           <TouchableOpacity
             style={styles.line}
             onPress={() => {
@@ -437,6 +446,8 @@ export default function ProductDetail({navigation, route}) {
               </Text>
             </View>
           </TouchableOpacity>
+          : null }
+          {product?.phone != ''?
           <TouchableOpacity
             style={styles.line}
             onPress={() => {
@@ -455,6 +466,8 @@ export default function ProductDetail({navigation, route}) {
               </Text>
             </View>
           </TouchableOpacity>
+          : null }
+          {product?.email != ''?
           <TouchableOpacity
             style={styles.line}
             onPress={() => {
@@ -473,6 +486,8 @@ export default function ProductDetail({navigation, route}) {
               </Text>
             </View>
           </TouchableOpacity>
+          : null }
+          {product?.website != ''?
           <TouchableOpacity
             style={styles.line}
             onPress={() => {
@@ -491,7 +506,8 @@ export default function ProductDetail({navigation, route}) {
               </Text>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.line} onPress={onCollapse}>
+          : null }
+          {/* <TouchableOpacity style={styles.line} onPress={onCollapse}>
             <View
               style={[styles.contentIcon, {backgroundColor: colors.border}]}>
               <Icon name="clock" size={16} color={BaseColor.whiteColor} />
@@ -531,7 +547,7 @@ export default function ProductDetail({navigation, route}) {
                 </View>
               );
             })}
-          </View>
+          </View> */}
         </View>
         <View style={[styles.contentDescription, {borderColor: colors.border}]}>
           <Text body2 style={{lineHeight: 20}}>
@@ -542,7 +558,7 @@ export default function ProductDetail({navigation, route}) {
               paddingVertical: 20,
               flexDirection: 'row',
             }}>
-            <View style={{flex: 1}}>
+            {/* <View style={{flex: 1}}>
               <Text caption1 grayColor>
                 {t('date_established')}
               </Text>
@@ -557,7 +573,7 @@ export default function ProductDetail({navigation, route}) {
               <Text headline style={{marginTop: 5}}>
                 {`${product?.priceMin ?? '-'}$ - ${product?.priceMax ?? '-'}$`}
               </Text>
-            </View>
+            </View> */}
           </View>
           <View
             style={{

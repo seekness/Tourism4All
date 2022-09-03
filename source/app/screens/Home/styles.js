@@ -49,9 +49,16 @@ export default StyleSheet.create({
     marginBottom: 15,
   },
   promotionBanner: {
-    height: Utils.scaleWithPixel(100),
-    width: '100%',
-    marginTop: 10,
+    // height: Utils.scaleWithPixel(100),
+    // width: '100%',
+    // marginTop: 10,
+    height:  Utils.scaleWithPixel(70),
+    flex: 1,
+    width: null,
+  },
+  tourItem: {
+    width: Utils.scaleWithPixel(135),
+    height: Utils.scaleWithPixel(160),
   },
   popularItem: {
     width: Utils.scaleWithPixel(135),

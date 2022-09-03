@@ -47,9 +47,9 @@ export default function Loading({navigation}) {
         <Text title1 style={{marginTop: 8}}>
           {BaseSetting.displayName}
         </Text>
-        <Text headline primaryColor style={{marginTop: 8}}>
+        {/* <Text headline primaryColor style={{marginTop: 8}}>
           LIST DIRECTORY
-        </Text>
+        </Text> */}
       </View>
       <ActivityIndicator
         size="large"

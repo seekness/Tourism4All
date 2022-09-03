@@ -8,7 +8,9 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "android:bundle:debug": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/",
+    "android:bundle:release": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/build/intermediates/res/merged/release/"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "1.15.17",
@@ -29,7 +31,7 @@
     "react-native-calendars": "1.1276.0",
     "react-native-device-info": "8.4.8",
     "react-native-fast-image": "8.5.11",
-    "react-native-gesture-handler": "2.2.0",
+    "react-native-gesture-handler": "^2.2.0",
     "react-native-maps": "0.30.1",
     "react-native-modal": "13.0.0",
     "react-native-reanimated": "2.3.1",
@@ -61,8 +63,8 @@
     "eslint-plugin-react-hooks": "^2.5.1",
     "jest": "^26.6.3",
     "jetifier": "^1.6.5",
-    "prettier": "2.3.0",
     "metro-react-native-babel-preset": "^0.66.2",
+    "prettier": "2.3.0",
     "react-test-renderer": "17.0.2"
   },
   "jest": {

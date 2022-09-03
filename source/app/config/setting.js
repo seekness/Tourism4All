@@ -3,11 +3,13 @@
  */
 export const BaseSetting = {
   name: 'listar',
-  displayName: 'Listar',
+  displayName: 'Tourism4All',
   appVersion: '1.0.4',
-  domain: 'tourism4all.aktuelnosti.net',
+  //domain: 'listarapp.com',
+  domain: 'aplikacija.somborkayak.club',
+  //domain: 'tourism4all.aktuelnosti.com',
   protocol: 'https',
-  defaultLanguage: 'sr',
+  defaultLanguage: 'en',
   languageSupport: [
     'sr',
     'en',

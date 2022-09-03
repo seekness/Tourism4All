@@ -67,9 +67,11 @@ export default function ListItem(props) {
       <View style={style}>
         <TouchableOpacity onPress={onPress}>
           <Image source={{uri: image}} style={styles.blockImage} />
+          {status != ''?
           <Tag status style={styles.tagStatus}>
             {t(status)}
           </Tag>
+          : null}
           {favorite ? (
             <Icon
               solid
@@ -92,13 +94,21 @@ export default function ListItem(props) {
                 flexDirection: 'row',
                 alignItems: 'center',
               }}>
+              {rate != ''?
               <Tag rate onPress={onPressTag}>
                 {rate}
               </Tag>
+              : 
+              <Tag rate onPress={onPressTag}>
+                0.0
+              </Tag>
+              }
               <View style={{marginLeft: 10}}>
+
                 <Text caption1 whiteColor semibold style={{marginBottom: 5}}>
                   {t('rate')}
                 </Text>
+
                 <StarRating
                   disabled={true}
                   starSize={10}
@@ -169,9 +179,11 @@ export default function ListItem(props) {
       <View style={[styles.listContent, style]}>
         <TouchableOpacity onPress={onPress}>
           <Image source={{uri: image}} style={styles.listImage} />
+          {status != ''?
           <Tag status style={styles.listTagStatus}>
             {t(status)}
           </Tag>
+          :null}
         </TouchableOpacity>
         <View style={styles.listContentRight}>
           <Text headline semibold grayColor>
@@ -181,9 +193,15 @@ export default function ListItem(props) {
             {title}
           </Text>
           <View style={styles.lineRate}>
+            {rate != ''?
             <Tag onPress={onPressTag} rateSmall style={{marginRight: 5}}>
               {rate}
             </Tag>
+            :
+            <Tag onPress={onPressTag} rateSmall style={{marginRight: 5}}>
+              0.0
+            </Tag>
+            }
             <StarRating
               disabled={true}
               starSize={10}
@@ -251,9 +269,11 @@ export default function ListItem(props) {
       <View style={[styles.girdContent, style]}>
         <TouchableOpacity onPress={onPress}>
           <Image source={{uri: image}} style={styles.girdImage} />
+          {status != ''?
           <Tag status style={styles.tagGirdStatus}>
             {t(status)}
           </Tag>
+          :null}
           {favorite ? (
             <Icon
               name="heart"
@@ -288,9 +308,15 @@ export default function ListItem(props) {
             alignItems: 'center',
             marginTop: 5,
           }}>
+          {rate != ''?
           <Tag onPress={onPressTag} rateSmall style={{marginRight: 5}}>
             {rate}
           </Tag>
+          :
+          <Tag onPress={onPressTag} rateSmall style={{marginRight: 5}}>
+            0.0
+          </Tag>
+          }
           <StarRating
             disabled={true}
             starSize={10}
@@ -340,9 +366,15 @@ export default function ListItem(props) {
             {subtitle}
           </Text>
           <View style={styles.smallContentRate}>
+            {rate != ''?
             <Tag onPress={onPressTag} rateSmall style={{marginRight: 4}}>
               {rate}
             </Tag>
+            :
+            <Tag onPress={onPressTag} rateSmall style={{marginRight: 4}}>
+              0.0
+            </Tag>
+            }
             <StarRating
               disabled={true}
               starSize={10}

@@ -1,53 +1,33 @@
 import {StyleSheet} from 'react-native';
 
 export default StyleSheet.create({
-  wrapContent: {
+  selectionContent: {
+    flexDirection: 'row',
     flexWrap: 'wrap',
-    flexDirection: 'row',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
   },
-  contentRange: {
+  locationContent: {
+    paddingHorizontal: 16,
     flexDirection: 'row',
+    alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 5,
-    marginTop: 10,
   },
-  contentResultRange: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 10,
-  },
-  contentList: {
-    flexDirection: 'row',
-    paddingTop: 10,
-    paddingBottom: 10,
-  },
-  circleIcon: {
+  sliderContent: {height: 32, marginHorizontal: 8},
+  slider: {position: 'absolute', bottom: 0, width: '100%'},
+  colorItem: {
     width: 32,
     height: 32,
     borderRadius: 16,
-    marginLeft: 20,
+    marginRight: 12,
     alignItems: 'center',
     justifyContent: 'center',
-    shadowOpacity: 0.35,
-    shadowOffset: {
-      width: 0,
-      height: 3,
-    },
-    shadowRadius: 3,
-    elevation: 0.4,
   },
-  btnClearSearch: {
-    position: 'absolute',
-    right: 0,
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: 30,
-    height: '100%',
-  },
-  locationContent: {
+  timeContent: {
+    padding: 8,
+    borderRadius: 12,
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: 20,
   },
+  bottomSheetContent: {width: '100%'},
 });

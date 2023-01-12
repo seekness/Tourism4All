@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>781138531616-s5io7a0pujh1svcfs04b35kg4ejnkqrm.apps.googleusercontent.com</string>
+	<string>431280419532-3fuv2sfbvd2sqc23fsug8bvcvd8muvbi.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.781138531616-s5io7a0pujh1svcfs04b35kg4ejnkqrm</string>
+	<string>com.googleusercontent.apps.431280419532-3fuv2sfbvd2sqc23fsug8bvcvd8muvbi</string>
 	<key>API_KEY</key>
-	<string>AIzaSyCdttE2Z6Xj8Qm2_cgDJynjXElNQF44uss</string>
+	<string>AIzaSyBs9F5Lw4-24uLnYnZcIz7CccUpyM_5P4U</string>
 	<key>GCM_SENDER_ID</key>
-	<string>781138531616</string>
+	<string>431280419532</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.huynh.listarPro</string>
 	<key>PROJECT_ID</key>
-	<string>listar-pro</string>
+	<string>listar-pro-c67bf</string>
 	<key>STORAGE_BUCKET</key>
-	<string>listar-pro.appspot.com</string>
+	<string>listar-pro-c67bf.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,8 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:781138531616:ios:80f729363c34b19e017345</string>
-	<key>DATABASE_URL</key>
-	<string>https://listar-pro.firebaseio.com</string>
+	<string>1:431280419532:ios:77a712d751d09468e00869</string>
 </dict>
 </plist>

@@ -2,12 +2,10 @@ import {StyleSheet} from 'react-native';
 
 export default StyleSheet.create({
   container: {
+    ...StyleSheet.absoluteFillObject,
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  logo: {
-    width: 120,
-    height: 120,
+    backgroundColor: '#00000080',
   },
 });

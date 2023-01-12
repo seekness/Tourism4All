@@ -1,73 +1,100 @@
 import {StyleSheet} from 'react-native';
 
 export default StyleSheet.create({
-  centerView: {
-    flex: 1,
+  rowContent: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+  },
+  userImage: {width: 40, height: 40, borderRadius: 20},
+  statusContent: {
+    paddingHorizontal: 4,
+    paddingVertical: 2,
+    borderRadius: 4,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  imgBanner: {
-    width: '100%',
-    height: 250,
-    position: 'absolute',
+  bookingContent: {
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+    borderRadius: 16,
   },
-  lineSpace: {
-    flexDirection: 'row',
+  rateContent: {
+    alignItems: 'flex-start',
+  },
+  tagRate: {
+    borderBottomLeftRadius: 4,
+    borderTopLeftRadius: 4,
+    borderBottomRightRadius: 4,
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+    minWidth: 28,
     alignItems: 'center',
-    justifyContent: 'space-between',
   },
-  rateLine: {
-    marginTop: 5,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  line: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 20,
-  },
-  contentIcon: {
+  iconInfo: {
     width: 32,
     height: 32,
     borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  userIcon: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: 'white',
-    marginRight: 5,
+  subInfoContent: {
+    paddingLeft: 40,
   },
-  map: {
-    ...StyleSheet.absoluteFillObject,
-  },
-  contentInforAction: {
-    marginLeft: 10,
+  rowHour: {
     flexDirection: 'row',
-    alignItems: 'center',
     justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 8,
+  },
+  rowAttachment: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  socialItem: {marginRight: 8, width: 32, height: 32, marginBottom: 8},
+  flexAlignRight: {
     flex: 1,
+    alignItems: 'flex-end',
   },
-  lineWorkHours: {
-    flexDirection: 'row',
+  tagItem: {
+    marginRight: 8,
+    marginBottom: 8,
+  },
+  smallProductItem: {marginBottom: 16},
+  linePlaceholder: {
+    height: 24,
+    width: '100%',
+    marginBottom: 16,
+  },
+  description: {lineHeight: 20},
+  bottomSheetContainer: {paddingLeft: 16, paddingVertical: 8},
+  bottomSheetShare: {
+    paddingHorizontal: 16,
+    paddingTop: 8,
+    paddingBottom: 16,
+  },
+  userImageShare: {width: 40, height: 40, borderRadius: 20},
+  backgroundVideo: {position: 'absolute', width: '100%', height: '100%'},
+  videoActions: {
+    position: 'absolute',
+    bottom: 8,
+    right: 8,
     alignItems: 'center',
-    paddingVertical: 10,
-    justifyContent: 'space-between',
-    borderBottomWidth: 1,
-  },
-  wrapContent: {
-    flexWrap: 'wrap',
+    justifyContent: 'center',
     flexDirection: 'row',
-    marginHorizontal: 20,
-    borderBottomWidth: 1,
-    paddingBottom: 20,
   },
-  contentDescription: {
-    marginHorizontal: 20,
-    paddingBottom: 20,
-    borderBottomWidth: 0.5,
+  videoButton: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  sliderDot: {bottom: 8},
+  mapsContent: {
+    width: '100%',
+    height: 200,
+    paddingHorizontal: 16,
+    paddingTop: 16,
   },
 });

@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "baseURL": ".",
+    "paths": {
+      "@api": ["app/api/index.js"],
+      "@components": ["app/components/index.js"],
+      "@configs": ["app/configs/index.js"],
+      "@models": ["app/models/index.js"],
+      "@developer": ["app/developer/index.js"],
+      "@navigation": ["app/navigation/index.js"],
+      "@navigator": ["app/navigation/navigator.js"],
+      "@screens": ["app/screens/index.js"],
+      "@store": ["app/redux/store/index.js"],
+      "@selectors": ["app/redux/selectors/index.js"],
+      "@reducers": ["app/redux/reducers/index.js"],
+      "@actions": ["app/redux/actions/index.js"],
+      "@sagas": ["app/redux/sagas/index.js"],
+      "@utils": ["app/utils/index.js"]
+    }
+  }
+}

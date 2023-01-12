@@ -1,7 +1,26 @@
+import {ScheduleModel} from '@models';
+
 export default class OpenTimeModel {
-  constructor(json) {
-    this.label = json?.key;
-    this.start = json?.schedule?.[0]?.start;
-    this.end = json?.schedule?.[0]?.end;
+  constructor(data) {
+    this.key = data.key;
+    this.dayOfWeek = data.dayOfWeek;
+    this.schedule = data.schedule;
+  }
+
+  static fromJson(json) {
+    try {
+      if (typeof json !== 'object') {
+        throw 'json OpenTimeModel is not object';
+      }
+      return new OpenTimeModel({
+        key: json.key ?? 'mon',
+        dayOfWeek: json.day_of_week ?? 1,
+        schedule: (json.schedule ?? []).map(item => {
+          return ScheduleModel.fromJson(item);
+        }),
+      });
+    } catch (e) {
+      console.log(e.toString());
+    }
   }
 }

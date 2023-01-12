@@ -1,144 +1,143 @@
-import React, {useState} from 'react';
+import React, {useContext, useRef, useState} from 'react';
 import {
-  View,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  Alert,
-} from 'react-native';
-import {BaseStyle, useTheme} from '@config';
+  Application,
+  Button,
+  Icon,
+  ScreenContainer,
+  SizedBox,
+  Text,
+  TextInput,
+  Toast,
+} from '@components';
+import {Styles} from '@configs';
 import {useTranslation} from 'react-i18next';
-import {Header, SafeAreaView, Icon, Text, Button, TextInput} from '@components';
-import * as api from '@api';
-import styles from './styles';
+import {Keyboard, ScrollView, TouchableOpacity, View} from 'react-native';
+import {validate} from '@utils';
+import {useDispatch} from 'react-redux';
+import {authActions} from '@actions';
 
-export default function ChangePassword({navigation}) {
+export default function Index({navigation}) {
   const {t} = useTranslation();
-  const offsetKeyboard = Platform.select({
-    ios: 0,
-    android: 20,
+  const {theme} = useContext(Application);
+  const dispatch = useDispatch();
+  const passwordRef = useRef();
+  const rePasswordRef = useRef();
+
+  const [password, setPassword] = useState('');
+  const [rePassword, setRePassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+
+  const [error, setError] = useState({
+    password: null,
+    rePassword: null,
   });
 
-  const [loading, setLoading] = useState(false);
-  const [password, setPassword] = useState('');
-  const [repassword, setRepassword] = useState('');
-  const {colors} = useTheme();
-  const [success, setSuccess] = useState({
-    password: true,
-    repassword: true,
-  });
+  const onChangePassword = value => {
+    const validPassword = validate(value, {empty: false});
+    setPassword(value);
+    setError({...error, password: validPassword});
+  };
+
+  const onChangeRePassword = value => {
+    const validRePassword = validate(value, {empty: false, match: password});
+    setRePassword(value);
+    setError({...error, rePassword: validRePassword});
+  };
 
   /**
-   *
-   * On Change Password
+   * on next
    */
-  const onChange = async () => {
-    if (!password || !repassword || password != repassword) {
-      if (password != repassword) {
-        Alert.alert({
-          title: t('change_password'),
-          message: t('confirm_password_not_corrent'),
-        });
-      }
-      setSuccess({
-        ...success,
-        password: false,
-        repassword: false,
-      });
-      return;
-    }
-    setLoading(true);
-    try {
-      const params = {
-        password,
-      };
-      const response = await api.changePassword(params);
-      Alert.alert({
-        type: 'success',
-        title: t('change_password'),
-        message: t('change_password_success'),
-        action: [{onPress: () => navigation.goBack()}],
-      });
-    } catch (error) {
-      Alert.alert({
-        title: t('change_password'),
-        message: error.data?.code ?? error.message,
-      });
-    }
-    setLoading(false);
+  const onNext = () => {
+    Keyboard.dismiss();
+    dispatch(
+      authActions.onChangePassword({password}, ({success, message}) => {
+        if (success) {
+          navigation.goBack();
+        }
+        Toast.show(t(message));
+      }),
+    );
+  };
+
+  /**
+   * check disable next step
+   */
+  const disableNext = () => {
+    const validPassword = validate(password, {empty: false});
+    const validRePassword = validate(rePassword, {
+      empty: false,
+      match: password,
+    });
+
+    return !!(validPassword || validRePassword);
   };
 
   return (
-    <SafeAreaView style={BaseStyle.safeAreaView} edges={['right', 'left']}>
-      <Header
-        title={t('change_password')}
-        renderLeft={() => {
-          return (
-            <Icon
-              name="arrow-left"
-              size={20}
-              color={colors.primary}
-              enableRTL={true}
-            />
-          );
-        }}
-        onPressLeft={() => {
-          navigation.goBack();
-        }}
-      />
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'android' ? 'height' : 'padding'}
-        style={{flex: 1, justifyContent: 'center'}}
-        keyboardVerticalOffset={offsetKeyboard}>
-        <ScrollView
-          contentContainerStyle={{
-            flex: 1,
-            justifyContent: 'center',
-            padding: 20,
-          }}>
-          <View style={styles.contentTitle}>
-            <Text headline semibold>
-              {t('password')}
-            </Text>
-          </View>
-          <TextInput
-            onChangeText={text => setPassword(text)}
-            secureTextEntry={true}
-            placeholder={t('password')}
-            value={password}
-            success={success.password}
-            onFocus={() => {
-              setSuccess({
-                ...success,
-                password: true,
-              });
-            }}
-          />
-          <View style={styles.contentTitle}>
-            <Text headline semibold>
-              {t('re_password')}
-            </Text>
-          </View>
-          <TextInput
-            onChangeText={text => setRepassword(text)}
-            secureTextEntry={true}
-            placeholder={t('password_confirm')}
-            value={repassword}
-            success={success.repassword}
-            onFocus={() => {
-              setSuccess({
-                ...success,
-                repassword: true,
-              });
-            }}
-          />
-          <View style={{paddingVertical: 15}}>
-            <Button loading={loading} full onPress={onChange}>
-              {t('confirm')}
-            </Button>
-          </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+    <ScreenContainer
+      navigation={navigation}
+      enableKeyboardAvoidingView={true}
+      style={{backgroundColor: theme.colors.card}}>
+      <ScrollView
+        keyboardShouldPersistTaps="handled"
+        style={Styles.flex}
+        contentContainerStyle={Styles.padding16}>
+        <SizedBox height={2} />
+        <Text typography="title" weight="medium" type="secondary">
+          {t('change_password_tour')}
+        </Text>
+        <SizedBox height={24} />
+        <TextInput
+          ref={passwordRef}
+          defaultValue={password}
+          size="small"
+          label={t('password')}
+          placeholder={t('input_password')}
+          onChangeText={onChangePassword}
+          secureTextEntry={!showPassword}
+          trailing={
+            <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+              <Icon
+                name={showPassword ? 'eye' : 'eye-off'}
+                color={theme.colors.secondary}
+              />
+            </TouchableOpacity>
+          }
+          onFocus={() => {
+            setError({...error, password: null});
+          }}
+          onBlur={() => onChangePassword(password)}
+          onSubmitEditing={() => rePasswordRef.current?.focus()}
+          error={t(error.password)}
+        />
+        <SizedBox height={16} />
+        <TextInput
+          ref={rePasswordRef}
+          defaultValue={rePassword}
+          size="small"
+          label={t('password')}
+          placeholder={t('re_input_password')}
+          onChangeText={onChangeRePassword}
+          secureTextEntry={!showPassword}
+          trailing={
+            <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+              <Icon
+                name={showPassword ? 'eye' : 'eye-off'}
+                color={theme.colors.secondary}
+              />
+            </TouchableOpacity>
+          }
+          onFocus={() => {
+            setError({...error, rePassword: null});
+          }}
+          onBlur={() => onChangeRePassword(rePassword)}
+          error={t(error.rePassword)}
+        />
+      </ScrollView>
+      <View style={Styles.buttonContent}>
+        <Button onPress={onNext} disabled={disableNext()}>
+          {t('update')}
+        </Button>
+      </View>
+    </ScreenContainer>
   );
 }

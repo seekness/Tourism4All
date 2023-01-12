@@ -1,144 +1,130 @@
-import React, {useState, useEffect} from 'react';
-import {FlatList, RefreshControl, ActivityIndicator, View} from 'react-native';
-import {BaseStyle, useTheme} from '@config';
+import React, {useContext, useEffect, useState} from 'react';
 import {
-  Header,
-  SafeAreaView,
-  Icon,
-  Text,
-  RateDetail,
-  CommentItem,
+  Application,
+  Button,
+  Empty,
+  RateSummary,
+  ReviewItem,
+  ScreenContainer,
 } from '@components';
-import styles from './styles';
+import {Styles} from '@configs';
 import {useTranslation} from 'react-i18next';
-import {useDispatch} from 'react-redux';
-import {productActions} from '@actions';
+import {ActivityIndicator, FlatList, RefreshControl, View} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
+import {reviewActions} from '@actions';
+import {reviewSelect} from '@selectors';
+import styles from './styles';
 
-export default function Review({navigation, route}) {
-  const {colors} = useTheme();
+export default function Index({navigation, route}) {
   const {t} = useTranslation();
+  const {theme} = useContext(Application);
   const dispatch = useDispatch();
+  const review = useSelector(reviewSelect);
 
   const [refreshing, setRefreshing] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [data, setData] = useState(null);
 
   useEffect(() => {
-    dispatch(
-      productActions.onLoadReview({post_id: route.params?.id}, item => {
-        setData(item);
-        setLoading(false);
-        setRefreshing(false);
-      }),
-    );
-  }, [dispatch, route.params.id]);
+    dispatch(reviewActions.onLoad(route.params?.item));
+    return () => dispatch(reviewActions.onReset(route.params?.item));
+  }, [dispatch, route.params]);
 
   /**
-   * on Load data
-   *
+   * on refresh review list
    */
-  const loadData = reload => {
-    if (reload) route.params?.reload?.();
+  const onRefresh = () => {
+    setRefreshing(true);
     dispatch(
-      productActions.onLoadReview({post_id: route.params?.id}, item => {
-        setData(item);
-        setLoading(false);
+      reviewActions.onLoad(route.params?.item, () => {
         setRefreshing(false);
       }),
     );
   };
 
   /**
-   * on Refresh commemt
+   * on feedback
    */
-  const onRefresh = () => {
-    setRefreshing(true);
-    loadData();
+  const onFeedback = () => {
+    navigation.navigate('Feedback', route.params);
+  };
+
+  /**
+   * render item review
+   * @param item
+   * @returns {JSX.Element}
+   */
+  const renderItem = ({item}) => {
+    return <ReviewItem item={item} style={styles.reviewItem} />;
   };
 
   /**
    * render content
-   * @returns
    */
   const renderContent = () => {
-    if (loading) {
+    if (review.data) {
       return (
-        <View style={styles.centerView}>
-          <ActivityIndicator size="large" color={colors.primary} />
-        </View>
+        <>
+          <View style={[Styles.paddingHorizontal16, Styles.paddingVertical8]}>
+            <RateSummary data={review?.summary} />
+          </View>
+          <FlatList
+            style={Styles.flex}
+            data={review.data ?? []}
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+                tintColor={theme.colors.text}
+                title={t('pull_to_reload')}
+                titleColor={theme.colors.text}
+                colors={[theme.colors.primary]}
+                progressBackgroundColor={theme.colors.card}
+              />
+            }
+            ListEmptyComponent={
+              <Empty
+                style={Styles.flex}
+                title={t('not_found_matching')}
+                message={t('please_try_again')}
+              />
+            }
+            contentContainerStyle={[
+              Styles.paddingHorizontal16,
+              Styles.paddingVertical8,
+            ]}
+            renderItem={renderItem}
+            keyExtractor={(item, index) => `${item?.id}${index}`}
+          />
+        </>
       );
     }
 
     return (
-      <FlatList
-        contentContainerStyle={{padding: 20}}
-        refreshControl={
-          <RefreshControl
-            colors={[colors.primary]}
-            tintColor={colors.primary}
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-          />
-        }
-        data={data?.list ?? []}
-        keyExtractor={(item, index) => item.id.toString()}
-        ListHeaderComponent={() => (
-          <RateDetail
-            point={data?.rating?.avg ?? 0}
-            maxPoint={5}
-            totalRating={data?.rating?.total ?? 0}
-            data={data?.rating?.data}
-          />
-        )}
-        renderItem={({item}) => (
-          <CommentItem
-            style={{marginTop: 10}}
-            image={item.authorImage}
-            name={item.author}
-            rate={item.rate}
-            date={item.date}
-            comment={item.content}
-          />
-        )}
-      />
+      <View style={Styles.flexCenter}>
+        <ActivityIndicator size="large" color={theme.colors.primary} />
+      </View>
     );
   };
 
   return (
-    <SafeAreaView style={BaseStyle.safeAreaView} edges={['right', 'left']}>
-      <Header
-        title={t('reviews')}
-        renderLeft={() => {
+    <ScreenContainer
+      navigation={navigation}
+      options={{
+        headerRight: () => {
           return (
-            <Icon
-              name="arrow-left"
-              size={20}
-              color={colors.primary}
-              enableRTL={true}
-            />
+            <View style={Styles.nativeRightButton}>
+              <Button
+                onPress={onFeedback}
+                type="text"
+                size="small"
+                full={false}
+                textStyle={{color: theme.colors.primary}}>
+                {t('add')}
+              </Button>
+            </View>
           );
-        }}
-        renderRight={() => {
-          return (
-            <Text headline primaryColor numberOfLines={1}>
-              {t('write')}
-            </Text>
-          );
-        }}
-        onPressLeft={() => {
-          navigation.goBack();
-        }}
-        onPressRight={() => {
-          const params = {
-            ...route.params,
-            reload: () => {
-              loadData(true);
-            },
-          };
-          navigation.navigate({name: 'Feedback', params});
-        }}
-      />
+        },
+      }}>
       {renderContent()}
-    </SafeAreaView>
+    </ScreenContainer>
   );
 }

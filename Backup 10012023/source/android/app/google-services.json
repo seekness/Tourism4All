@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "781138531616",
+    "firebase_url": "https://listar-pro.firebaseio.com",
+    "project_id": "listar-pro",
+    "storage_bucket": "listar-pro.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:781138531616:android:cb698ddcbec03919017345",
+        "android_client_info": {
+          "package_name": "com.Tourism4All"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "781138531616-59q6bfksd8upgvnf5a69guhu4nlpler5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC0UkjZ5GUNG2PlzoVKE9l1khHHfIYtF6Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "781138531616-59q6bfksd8upgvnf5a69guhu4nlpler5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

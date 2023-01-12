@@ -1,0 +1,145 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "app/assets/fonts/ProximaNova-Black.otf",
+      "sha1": "94159dcb3cba9e8702b22caa2ff9bc74c03b4c70"
+    },
+    {
+      "path": "app/assets/fonts/ProximaNova-Bold.otf",
+      "sha1": "411bff1d3b8f0144f1685c94a21156a53848d5a6"
+    },
+    {
+      "path": "app/assets/fonts/ProximaNova-ExtraBold.otf",
+      "sha1": "01ed725f5618902e19911eccac005c7069bc8017"
+    },
+    {
+      "path": "app/assets/fonts/ProximaNova-Regular.otf",
+      "sha1": "28d04eb938c05b5158a69a709682d4f0517a59ab"
+    },
+    {
+      "path": "app/assets/fonts/ProximaNova-Thin.otf",
+      "sha1": "d1255358e8dd8b7bcc9980ad80cde9e6a707d3db"
+    },
+    {
+      "path": "app/assets/fonts/Raleway-Black.ttf",
+      "sha1": "5edd8f0d86bb8a6941fc2fa9ebdc4a1e11d91a9e"
+    },
+    {
+      "path": "app/assets/fonts/Raleway-BlackItalic.ttf",
+      "sha1": "d84d3b6c9ff1a19a42167f3005184fc01a891d26"
+    },
+    {
+      "path": "app/assets/fonts/Raleway-Bold.ttf",
+      "sha1": "6860363db5ea3dc384addbc4ff5d0aaee17b91eb"
+    },
+    {
+      "path": "app/assets/fonts/Raleway-BoldItalic.ttf",
+      "sha1": "3d3325fd881eb52da9dda866fdfb62ce80113bf2"
+    },
+    {
+      "path": "app/assets/fonts/Raleway-ExtraBold.ttf",
+      "sha1": "ea49a620d98dfd1004eaed8874eb2fbf575db8b4"
+    },
+    {
+      "path": "app/assets/fonts/Raleway-ExtraBoldItalic.ttf",
+      "sha1": "207eb011625276a8126bd9335da0504d3f1d6bc0"
+    },
+    {
+      "path": "app/assets/fonts/Raleway-ExtraLight.ttf",
+      "sha1": "1e4b7d71014de005fb93fbf8a12049a313235ed6"
+    },
+    {
+      "path": "app/assets/fonts/Raleway-ExtraLightItalic.ttf",
+      "sha1": "b7d74749f515514d3bd88251d196a300e0445baa"
+    },
+    {
+      "path": "app/assets/fonts/Raleway-Italic.ttf",
+      "sha1": "4459c9dfd0f66afe4256752e256416bba00da40b"
+    },
+    {
+      "path": "app/assets/fonts/Raleway-Light.ttf",
+      "sha1": "557e12899c0c636753aa19259c2cea336e0c927d"
+    },
+    {
+      "path": "app/assets/fonts/Raleway-LightItalic.ttf",
+      "sha1": "ad6a5deb0479184456b5bdb63d32b022d0fbee25"
+    },
+    {
+      "path": "app/assets/fonts/Raleway-Medium.ttf",
+      "sha1": "0c8681407d5de2de363187e7911e790d34d808c1"
+    },
+    {
+      "path": "app/assets/fonts/Raleway-MediumItalic.ttf",
+      "sha1": "8a14d7e102c68ccaa136772d65ae0c53c4278a3d"
+    },
+    {
+      "path": "app/assets/fonts/Raleway-Regular.ttf",
+      "sha1": "1e8694a5ea1ff0e0f8800e5c23470c5132ec9123"
+    },
+    {
+      "path": "app/assets/fonts/Raleway-SemiBold.ttf",
+      "sha1": "d9eeb3f776f8ad1ae98361df8f377b4809d4ae52"
+    },
+    {
+      "path": "app/assets/fonts/Raleway-SemiBoldItalic.ttf",
+      "sha1": "0804298e3917a7bf21fa7cd7e664120e87aec69c"
+    },
+    {
+      "path": "app/assets/fonts/Raleway-Thin.ttf",
+      "sha1": "71beeeaf454a6641d63b1361e1167dd3f1a5b201"
+    },
+    {
+      "path": "app/assets/fonts/Raleway-ThinItalic.ttf",
+      "sha1": "19f8872a77b37eb95e8cd3da99c9e54b3e579d83"
+    },
+    {
+      "path": "app/assets/fonts/SFProText-Black.otf",
+      "sha1": "f263c4a1bf2800d9bb2e338a9c7b3b16e93a4c1e"
+    },
+    {
+      "path": "app/assets/fonts/SFProText-Black.ttf",
+      "sha1": "e3263641787151d41c0bf2009d5c31a3b0cc2d62"
+    },
+    {
+      "path": "app/assets/fonts/SFProText-Bold.ttf",
+      "sha1": "632e6cea171b276e5dd1f13b152c702fbf562cee"
+    },
+    {
+      "path": "app/assets/fonts/SFProText-Heavy.ttf",
+      "sha1": "bfc75c545dbe2a8c7c3d6d6223e42aaa5ccb9432"
+    },
+    {
+      "path": "app/assets/fonts/SFProText-Light.ttf",
+      "sha1": "ecc8da32c2eac6044c807e945375180b7cda3a20"
+    },
+    {
+      "path": "app/assets/fonts/SFProText-Medium.ttf",
+      "sha1": "3b8df618cd23e83843b16a8a32de1ddc9de44df4"
+    },
+    {
+      "path": "app/assets/fonts/SFProText-Regular.ttf",
+      "sha1": "6864a458168b5e6269804776ccff59b73cb569df"
+    },
+    {
+      "path": "app/assets/fonts/SFProText-Semibold.ttf",
+      "sha1": "9560ae412d73c7c9af72333db50464b4e597b0f9"
+    },
+    {
+      "path": "app/assets/fonts/SFProText-Thin.otf",
+      "sha1": "21501ea20eb2460a981cf1c30263db351512e847"
+    },
+    {
+      "path": "app/assets/fonts/SFProText-Thin.ttf",
+      "sha1": "f47dbd2952ef12f55e4e6f7345862698628231b2"
+    },
+    {
+      "path": "app/assets/fonts/SFProText-Ultralight.otf",
+      "sha1": "e4028ea8774d23fb23e88f9808988b27753080ba"
+    },
+    {
+      "path": "app/assets/fonts/SFProText-Ultralight.ttf",
+      "sha1": "f5089a46779aaa8f26f9ca77c0adc56dac8a1a79"
+    }
+  ]
+}

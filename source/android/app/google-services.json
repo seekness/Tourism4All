@@ -1,35 +1,41 @@
 {
   "project_info": {
-    "project_number": "781138531616",
-    "firebase_url": "https://listar-pro.firebaseio.com",
-    "project_id": "listar-pro",
-    "storage_bucket": "listar-pro.appspot.com"
+    "project_number": "431280419532",
+    "project_id": "listar-pro-c67bf",
+    "storage_bucket": "listar-pro-c67bf.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:781138531616:android:cb698ddcbec03919017345",
+        "mobilesdk_app_id": "1:431280419532:android:84761c1e5d0865dfe00869",
         "android_client_info": {
-          "package_name": "com.Tourism4All"
+          "package_name": "com.listarPro"
         }
       },
       "oauth_client": [
         {
-          "client_id": "781138531616-59q6bfksd8upgvnf5a69guhu4nlpler5.apps.googleusercontent.com",
+          "client_id": "431280419532-p5ss6g13e4bf9hdovin8glcmuqc1sp2p.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyC0UkjZ5GUNG2PlzoVKE9l1khHHfIYtF6Q"
+          "current_key": "AIzaSyC9SRvefXUdOUINXTFGlZ9WcB-Q1u33bzA"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "781138531616-59q6bfksd8upgvnf5a69guhu4nlpler5.apps.googleusercontent.com",
+              "client_id": "431280419532-p5ss6g13e4bf9hdovin8glcmuqc1sp2p.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "431280419532-3fuv2sfbvd2sqc23fsug8bvcvd8muvbi.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.huynh.listarPro"
+              }
             }
           ]
         }

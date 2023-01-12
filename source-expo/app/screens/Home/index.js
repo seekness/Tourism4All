@@ -1,367 +1,165 @@
-import React, {useState} from 'react';
-import {
-  View,
-  ScrollView,
-  Animated,
-  TouchableOpacity,
-  FlatList,
-} from 'react-native';
-import {
-  Placeholder,
-  PlaceholderLine,
-  Loader,
-  Progressive,
-  PlaceholderMedia,
-} from 'rn-placeholder';
-import {Image, Text, Icon, Card, SafeAreaView, ListItem} from '@components';
-import {BaseStyle, BaseColor, useTheme} from '@config';
-import * as Utils from '@utils';
-import styles from './styles';
-import Swiper from 'react-native-swiper';
-import {useSelector, useDispatch} from 'react-redux';
-import {homeSelect, settingSelect} from '@selectors';
-import {wishListActions} from '@actions';
+import React, {useContext, useState} from 'react';
+import {RefreshControl, useWindowDimensions, View} from 'react-native';
+import Animated, {
+  interpolate,
+  useAnimatedScrollHandler,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
 import {useTranslation} from 'react-i18next';
-import {FilterModel} from '@models';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  Application,
+  ImageSlider,
+  SafeAreaView,
+  SearchPicker,
+  SizedBox,
+} from '@components';
+import {Styles} from '@configs';
+import {homeSelect} from '@selectors';
+import {homeActions} from '@actions';
+import Categories from './components/category';
+import Locations from './components/location';
+import Recent from './components/recent';
+import styles from './styles';
 
-const deltaY = new Animated.Value(0);
 export default function Home({navigation}) {
-  const {colors} = useTheme();
+  const {height: heightDevice} = useWindowDimensions();
+  const bannerHeight = heightDevice * 0.3;
+  const {theme} = useContext(Application);
   const {t} = useTranslation();
-  const dispatch = useDispatch();
-  const setting = useSelector(settingSelect);
   const home = useSelector(homeSelect);
-  const [heightHeader, setHeightHeader] = useState(Utils.heightHeader());
-  const heightImageBanner = Utils.scaleWithPixel(180);
-  const marginTopBanner = heightImageBanner - heightHeader + 10;
+  const translationY = useSharedValue(0);
+  const scrollHandler = useAnimatedScrollHandler(
+    ({layoutMeasurement, contentOffset, contentSize}) => {
+      if (layoutMeasurement.height + contentOffset.y >= contentSize.height) {
+        return;
+      }
+      translationY.value = contentOffset.y;
+    },
+  );
+  const dispatch = useDispatch();
+  const [refreshing, setRefreshing] = useState(false);
 
   /**
-   * update status wishlist
-   * @param {*} item
+   * on refresh
    */
-  const onUpdate = item => {
-    dispatch(wishListActions.onUpdate(item));
-  };
-
-  /**
-   * render banner
-   */
-  const renderBanner = () => {
-    if (home.sliders?.length > 0) {
-      return (
-        <Swiper
-          dotStyle={{
-            backgroundColor: colors.text,
-          }}
-          activeDotColor={colors.primary}
-          paginationStyle={styles.contentPage}
-          removeClippedSubviews={false}
-          autoplay={true}
-          autoplayTimeout={2}>
-          {home.sliders.map((item, index) => {
-            return <Image key={item} source={{uri: item}} style={{flex: 1}} />;
-          })}
-        </Swiper>
-      );
-    }
-
-    return (
-      <Placeholder Animation={Loader}>
-        <PlaceholderLine style={{height: '98%'}} />
-      </Placeholder>
+  const onRefresh = async () => {
+    setRefreshing(true);
+    dispatch(
+      homeActions.onLoad(() => {
+        setRefreshing(false);
+      }),
     );
   };
 
   /**
-   * render Category list
-   *
-   * @returns
+   * on search
    */
-  const renderCategory = () => {
-    let categories = home.categories;
-    let enableMore = categories?.length > 7;
-    if (enableMore) {
-      categories = home.categories.slice(0, 7);
-    }
-
-    if (categories?.length > 0) {
-      return (
-        <View style={styles.serviceContent}>
-          {categories.map((item, index) => {
-            return (
-              <TouchableOpacity
-                key={`category${item.id}`}
-                style={[
-                  styles.serviceItem,
-                  {width: (Utils.getWidthDevice() - 40) * 0.25},
-                ]}
-                onPress={() => {
-                  const filter = new FilterModel();
-                  filter.category = [item];
-                  filter.perPage = setting.perPage;
-                  navigation.navigate('List', {filter});
-                }}>
-                <View
-                  style={[
-                    styles.serviceCircleIcon,
-                    {backgroundColor: item.color},
-                  ]}>
-                  <Icon
-                    name={Utils.iconConvert(item.icon)}
-                    size={20}
-                    color={BaseColor.whiteColor}
-                    solid
-                  />
-                </View>
-                <Text footnote numberOfLines={1}>
-                  {t(item.title)}
-                </Text>
-              </TouchableOpacity>
-            );
-          })}
-          {enableMore && (
-            <TouchableOpacity
-              style={[
-                styles.serviceItem,
-                {width: (Utils.getWidthDevice() - 40) * 0.25},
-              ]}
-              onPress={() => navigation.navigate('Category')}>
-              <View
-                style={[
-                  styles.serviceCircleIcon,
-                  {backgroundColor: BaseColor.kashmir},
-                ]}>
-                <Icon
-                  name="ellipsis-h"
-                  size={20}
-                  color={BaseColor.whiteColor}
-                  solid
-                />
-              </View>
-              <Text footnote numberOfLines={1}>
-                {t('more')}
-              </Text>
-            </TouchableOpacity>
-          )}
-        </View>
-      );
-    }
-
-    return (
-      <View style={styles.serviceContent}>
-        {[1, 2, 3, 4, 5, 6, 7, 8].map((item, index) => {
-          return (
-            <View
-              style={{
-                width: (Utils.getWidthDevice() - 40) * 0.25,
-                marginBottom: 8,
-              }}
-              key={`category${item}`}>
-              <Placeholder Animation={Progressive}>
-                <View style={{alignItems: 'center'}}>
-                  <PlaceholderMedia style={styles.serviceCircleIcon} />
-                  <PlaceholderLine
-                    style={{width: '50%', height: 8, marginTop: 2}}
-                  />
-                </View>
-              </Placeholder>
-            </View>
-          );
-        })}
-      </View>
-    );
+  const onSearch = () => {
+    navigation.navigate('Search');
   };
 
   /**
-   * render Popular list
-   * @returns
+   * on scan qrcode
    */
-  const renderPopular = () => {
-    if (home.locations?.length > 0) {
-      return (
-        <FlatList
-          contentContainerStyle={{paddingLeft: 5, paddingRight: 15}}
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-          data={home.locations}
-          keyExtractor={(item, index) => item.id.toString()}
-          renderItem={({item, index}) => {
-            return (
-              <Card
-                style={[styles.popularItem, {marginLeft: 15}]}
-                image={item.image?.full}
-                onPress={() => {
-                  const filter = new FilterModel();
-                  filter.area = item;
-                  filter.perPage = setting.perPage;
-                  navigation.navigate('List', {filter});
-                }}>
-                <Text headline whiteColor semibold>
-                  {item.title}
-                </Text>
-              </Card>
-            );
-          }}
-        />
-      );
-    }
-
-    return (
-      <FlatList
-        contentContainerStyle={{paddingLeft: 5, paddingRight: 15}}
-        horizontal={true}
-        showsHorizontalScrollIndicator={false}
-        data={[1, 2, 3, 4, 5]}
-        keyExtractor={(item, index) => item.toString()}
-        renderItem={({item, index}) => {
-          return (
-            <View style={[styles.popularItem, {marginLeft: 15}]}>
-              <Placeholder Animation={Progressive}>
-                <PlaceholderMedia
-                  style={{width: '100%', height: '100%', borderRadius: 8}}
-                />
-              </Placeholder>
-            </View>
-          );
-        }}
-      />
-    );
+  const onScan = () => {
+    navigation.navigate('ScanQR');
   };
 
   /**
-   * render List recent
-   * @returns
+   * onPress category
+   * @param item
    */
-  const renderRecent = () => {
-    if (home.recents?.length > 0) {
-      return home.recents.map((item, index) => {
-        return (
-          <ListItem
-            small
-            key={`recent${item.id}`}
-            image={item.image?.full}
-            title={item.title}
-            subtitle={item.category?.title}
-            rate={item.rate}
-            style={{marginBottom: 15}}
-            onPress={() => {
-              navigation.navigate('ProductDetail', {
-                id: item.id,
-                onLike: favorite => {
-                  item.favorite = favorite;
-                  onUpdate(item);
-                },
-              });
-            }}
-          />
-        );
-      });
+  const onCategory = item => {
+    if (item?.hasChild) {
+      navigation.push('CategoryList', {item});
+    } else {
+      navigation.navigate('Listing', {item});
     }
-
-    return [1, 2, 3].map((item, index) => {
-      return (
-        <ListItem
-          small
-          loading={true}
-          key={`recent${item}`}
-          style={{marginBottom: 15}}
-        />
-      );
-    });
   };
+
+  /**
+   * on press product
+   */
+  const onPressProduct = item => {
+    navigation.navigate('ProductDetail', {item});
+  };
+
+  /**
+   * on press category list
+   */
+  const onCategoryList = () => {
+    navigation.navigate('CategoryList');
+  };
+
+  const actionStyle = useAnimatedStyle(() => {
+    const height = withTiming(
+      interpolate(
+        translationY.value,
+        [0, 0, bannerHeight, bannerHeight],
+        [bannerHeight, bannerHeight, 110, 110],
+      ),
+      {duration: 0},
+    );
+    return {
+      height,
+      position: 'absolute',
+      backgroundColor: theme.colors.background,
+      zIndex: 1,
+    };
+  });
 
   return (
-    <View style={{flex: 1}}>
-      <Animated.View
-        style={[
-          styles.imageBackground,
-          {
-            height: deltaY.interpolate({
-              inputRange: [
-                0,
-                Utils.scaleWithPixel(110),
-                Utils.scaleWithPixel(110),
-              ],
-              outputRange: [heightImageBanner, heightHeader, 0],
-            }),
-          },
-        ]}>
-        {renderBanner()}
+    <View style={Styles.flex}>
+      <Animated.View style={actionStyle}>
+        <ImageSlider
+          data={home?.banner?.map(item => {
+            return {
+              image: item,
+            };
+          })}
+          style={styles.slider}
+          paginationStyle={styles.sliderDot}
+        />
+        <SizedBox height={28} />
+        <SafeAreaView edges={['left', 'right']} mode="margin">
+          <SearchPicker
+            style={styles.searchContainer}
+            onSearch={onSearch}
+            onScan={onScan}
+          />
+        </SafeAreaView>
       </Animated.View>
-      <SafeAreaView
-        style={BaseStyle.safeAreaView}
-        edges={['right', 'top', 'left']}>
-        <ScrollView
-          onScroll={Animated.event(
-            [
-              {
-                nativeEvent: {
-                  contentOffset: {y: deltaY},
-                },
-              },
-            ],
-            {useNativeDriver: false},
-          )}
-          onContentSizeChange={() => {
-            setHeightHeader(Utils.heightHeader());
-          }}
-          scrollEventThrottle={8}>
-          <View
-            style={[
-              styles.searchForm,
-              {
-                backgroundColor: colors.background,
-                borderColor: colors.border,
-                shadowColor: colors.border,
-              },
-              {marginTop: marginTopBanner},
-            ]}>
-            <TouchableOpacity
-              onPress={() => navigation.navigate('SearchHistory')}>
-              <View
-                style={[BaseStyle.textInput, {backgroundColor: colors.card}]}>
-                <Text body1 grayColor style={{flex: 1}}>
-                  {t('search_location')}
-                </Text>
-                <View style={{paddingVertical: 8}}>
-                  <View
-                    style={[styles.lineForm, {backgroundColor: colors.border}]}
-                  />
-                </View>
-                <Icon
-                  name="location-arrow"
-                  size={18}
-                  color={colors.primaryLight}
-                  solid
-                />
-              </View>
-            </TouchableOpacity>
-          </View>
-          {renderCategory()}
-          <View style={styles.contentPopular}>
-            <Text title3 semibold>
-              {t('popular_location')}
-            </Text>
-            <Text body2 grayColor>
-              {t('popular_lologan')}
-            </Text>
-          </View>
-          {renderPopular()}
-          <View
-            style={{
-              paddingHorizontal: 20,
-              paddingTop: 15,
-            }}>
-            <Text title3 semibold>
-              {t('recent_location')}
-            </Text>
-            <Text body2 grayColor style={{marginBottom: 15}}>
-              {t('recent_sologan')}
-            </Text>
-            {renderRecent()}
-          </View>
-        </ScrollView>
-      </SafeAreaView>
+      <Animated.ScrollView
+        onScroll={scrollHandler}
+        scrollEventThrottle={16}
+        refreshControl={
+          <RefreshControl
+            progressViewOffset={bannerHeight}
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            tintColor={theme.colors.text}
+            title={t('pull_to_reload')}
+            titleColor={theme.colors.text}
+            colors={[theme.colors.primary]}
+            progressBackgroundColor={theme.colors.card}
+          />
+        }>
+        <SafeAreaView edges={['left', 'right']} mode="margin">
+          <SizedBox height={bannerHeight} />
+          <SizedBox height={12} />
+          <Categories
+            data={home?.category}
+            onPress={onCategory}
+            onCategoryList={onCategoryList}
+          />
+          <SizedBox height={12} />
+          <Locations data={home?.location} onPress={onCategory} />
+          <Recent data={home?.recent} onPress={onPressProduct} />
+        </SafeAreaView>
+      </Animated.ScrollView>
     </View>
   );
 }

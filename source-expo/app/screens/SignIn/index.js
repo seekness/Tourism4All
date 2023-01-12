@@ -1,129 +1,176 @@
-import React, {useState} from 'react';
-import {
-  View,
-  TouchableOpacity,
-  KeyboardAvoidingView,
-  Platform,
-  Alert,
-} from 'react-native';
+import React, {useContext, useEffect, useRef, useState} from 'react';
+import {Keyboard, ScrollView, TouchableOpacity, View} from 'react-native';
 import {useDispatch} from 'react-redux';
-import {BaseStyle, useTheme} from '@config';
-import {Header, SafeAreaView, Icon, Text, Button, TextInput} from '@components';
-import styles from './styles';
-import {useTranslation} from 'react-i18next';
+import {Styles} from '@configs';
+import {
+  Application,
+  Button,
+  ScreenContainer,
+  Icon,
+  SizedBox,
+  Text,
+  TextInput,
+  Toast,
+} from '@components';
+import {validate} from '@utils';
 import {authActions} from '@actions';
+import {useTranslation} from 'react-i18next';
 
 export default function SignIn({navigation, route}) {
-  const {colors} = useTheme();
   const {t} = useTranslation();
+  const {theme} = useContext(Application);
+  const usernameRef = useRef();
+  const passwordRef = useRef();
   const dispatch = useDispatch();
 
-  const [loading, setLoading] = useState(false);
-  const [id, setId] = useState('paul');
+  const [username, setUsername] = useState('paul');
   const [password, setPassword] = useState('123456@listar');
-  const [success, setSuccess] = useState({id: true, password: true});
+  const [showPassword, setShowPassword] = useState(false);
+  const [errorUsername, setErrorUsername] = useState();
+  const [errorPassword, setErrorPassword] = useState();
+
+  useEffect(() => {
+    setTimeout(() => {
+      usernameRef.current?.focus();
+    }, 500);
+  }, []);
 
   /**
-   * call when action onLogin
+   * on change user name
+   * @param {*} value
    */
-  const onLogin = () => {
-    if (id == '' || password == '') {
-      setSuccess({
-        ...success,
-        id: false,
-        password: false,
-      });
-      return;
-    }
-    const params = {
-      username: id,
-      password,
-    };
-    setLoading(true);
+  const onChangeUsername = value => {
+    const error = validate(value, {empty: false});
+    setUsername(value);
+    setErrorUsername(error);
+  };
+
+  /**
+   * on change password
+   * @param {*} value
+   */
+  const onChangePassword = value => {
+    const error = validate(value, {empty: false});
+    setErrorPassword(error);
+    setPassword(value);
+  };
+
+  /**
+   * on sign in
+   */
+  const onSignIn = params => {
+    Keyboard.dismiss();
     dispatch(
-      authActions.onLogin(params, response => {
-        if (response?.success) {
-          navigation.goBack();
-          setTimeout(() => {
-            route.params?.success?.();
-          }, 1000);
-          return;
+      authActions.onLogin(params, ({success, message}) => {
+        if (success) {
+          route?.params?.onSuccess?.();
+        } else {
+          Toast.show(message);
         }
-        Alert.alert({title: t('sign_in'), message: response?.data?.code});
-        setLoading(false);
       }),
     );
   };
 
-  const offsetKeyboard = Platform.select({
-    ios: 0,
-    android: 20,
-  });
+  /**
+   * on forgot password
+   */
+  const onForgotPassword = () => {
+    navigation.navigate('ForgotPassword');
+  };
+
+  /**
+   * on sign up
+   */
+  const onSignUp = () => {
+    navigation.navigate('SignUp', {onSignIn});
+  };
+
+  /**
+   * check disable sign in
+   */
+  const disableSignIn = () => {
+    const validUsername = validate(username, {empty: false});
+    const validPassword = validate(password, {empty: false});
+    if (validUsername || validPassword) {
+      return true;
+    }
+  };
 
   return (
-    <SafeAreaView style={BaseStyle.safeAreaView} edges={['right', 'left']}>
-      <Header
-        title={t('sign_in')}
-        renderLeft={() => {
-          return (
-            <Icon
-              name="arrow-left"
-              size={20}
-              color={colors.primary}
-              enableRTL={true}
-            />
-          );
-        }}
-        onPressLeft={() => {
-          navigation.goBack();
-        }}
-      />
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'android' ? 'height' : 'padding'}
-        keyboardVerticalOffset={offsetKeyboard}
-        style={{flex: 1}}>
-        <View style={styles.contain}>
-          <TextInput
-            onChangeText={setId}
-            onFocus={() => {
-              setSuccess({
-                ...success,
-                id: true,
-              });
-            }}
-            placeholder={t('input_id')}
-            success={success.id}
-            value={id}
-          />
-          <TextInput
-            style={{marginTop: 10}}
-            onChangeText={setPassword}
-            onFocus={() => {
-              setSuccess({
-                ...success,
-                password: true,
-              });
-            }}
-            placeholder={t('input_password')}
-            secureTextEntry={true}
-            success={success.password}
-            value={password}
-          />
-          <Button
-            style={{marginTop: 20}}
-            full
-            loading={loading}
-            onPress={onLogin}>
-            {t('sign_in')}
-          </Button>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('ResetPassword')}>
-            <Text body1 grayColor style={{marginTop: 25}}>
-              {t('forgot_your_password')}
+    <ScreenContainer
+      navigation={navigation}
+      enableKeyboardAvoidingView={true}
+      style={{backgroundColor: theme.colors.card}}>
+      <ScrollView
+        keyboardShouldPersistTaps="handled"
+        style={Styles.flex}
+        contentContainerStyle={Styles.padding16}>
+        <Text typography="h4" weight="bold">
+          {t('welcome')}
+        </Text>
+        <SizedBox height={2} />
+        <Text typography="title" weight="medium" type="secondary">
+          {t('sign_in_tour')}
+        </Text>
+        <SizedBox height={24} />
+        <TextInput
+          ref={usernameRef}
+          defaultValue={username}
+          label={t('account')}
+          placeholder={t('input_account')}
+          onChangeText={onChangeUsername}
+          onFocus={() => {
+            setErrorUsername(null);
+          }}
+          onBlur={() => onChangeUsername(username)}
+          onSubmitEditing={() => passwordRef.current?.focus()}
+          error={t(errorUsername)}
+          size="small"
+        />
+        <SizedBox height={16} />
+        <TextInput
+          ref={passwordRef}
+          defaultValue={password}
+          label={t('password')}
+          placeholder={t('input_password')}
+          onChangeText={onChangePassword}
+          secureTextEntry={!showPassword}
+          onFocus={() => {
+            setErrorPassword(null);
+          }}
+          onBlur={() => onChangePassword(password)}
+          trailing={
+            <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+              <Icon
+                name={showPassword ? 'eye' : 'eye-off'}
+                color={theme.colors.secondary}
+              />
+            </TouchableOpacity>
+          }
+          error={t(errorPassword)}
+          size="small"
+        />
+        <SizedBox height={16} />
+        <View style={Styles.rowSpace}>
+          <TouchableOpacity onPress={onForgotPassword}>
+            <Text typography="title" color="secondary">
+              {t('forgot_password')}
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={onSignUp}>
+            <Text typography="title" color="secondary">
+              {t('sign_up')}
             </Text>
           </TouchableOpacity>
         </View>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+      </ScrollView>
+      <View style={Styles.buttonContent}>
+        <Button
+          onPress={() => onSignIn({username, password})}
+          disabled={disableSignIn()}>
+          {t('sign_in')}
+        </Button>
+      </View>
+    </ScreenContainer>
   );
 }

@@ -1,0 +1,63 @@
+PROJECT_NAME = ENV["PROJECT_NAME"]
+XCODE_WORKSPACE = ENV["XCODE_WORKSPACE"]
+APP_IDENTIFIER = ENV["APP_IDENTIFIER"]
+PROVISIONING_PROFILE = ENV["PROVISIONING_PROFILE"]
+CONNECT_APP_ID = ENV["CONNECT_APP_ID"]
+GIT_AUTHORIZATION = ENV["GIT_AUTHORIZATION"]
+CONNECT_KEY_ID = ENV["CONNECT_KEY_ID"]
+CONNECT_ISSUER_ID = ENV["CONNECT_ISSUER_ID"]
+CONNECT_KEY_CONTENT = ENV["CONNECT_KEY_CONTENT"]
+
+lane :release do
+
+    api_key = app_store_connect_api_key(
+        key_id: CONNECT_KEY_ID,
+        issuer_id: CONNECT_ISSUER_ID,
+        key_content: CONNECT_KEY_CONTENT
+    )
+
+    build_number = latest_testflight_build_number(api_key: api_key) + 1
+
+    increment_build_number({
+        build_number: build_number
+    })
+
+    create_keychain(
+        name: "name",
+        password: "password",
+        unlock: true,
+        timeout: 3600
+    )
+
+    match(
+        type: 'appstore',
+        git_basic_authorization: Base64.strict_encode64(GIT_AUTHORIZATION),
+        readonly: true,
+        keychain_name: "name",
+        keychain_password: "password" 
+    )
+
+    gym(
+        scheme: PROJECT_NAME,
+        workspace: XCODE_WORKSPACE,
+        silent: true,
+        configuration: "Release",
+        export_method: "app-store",
+        export_options: {
+            provisioningProfiles: { 
+                APP_IDENTIFIER => PROVISIONING_PROFILE
+            }
+        }
+    )
+
+    pilot(
+        apple_id: CONNECT_APP_ID,
+        skip_waiting_for_build_processing: true,
+        skip_submission: true,
+        distribute_external: false,
+        notify_external_testers: false,
+        ipa: "./#{PROJECT_NAME}.ipa",
+        api_key: api_key
+    )
+
+end

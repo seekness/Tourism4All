@@ -1,140 +1,110 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {
-  View,
-  ScrollView,
-  KeyboardAvoidingView,
-  Platform,
-  ActivityIndicator,
-} from 'react-native';
-import {BaseStyle, BaseColor, useTheme} from '@config';
-import {
+  Application,
+  Button,
   Image,
-  Header,
-  SafeAreaView,
-  Icon,
+  Rating,
+  ScreenContainer,
+  SizedBox,
   Text,
-  StarRating,
   TextInput,
+  Toast,
 } from '@components';
 import {useTranslation} from 'react-i18next';
-import {useDispatch, useSelector} from 'react-redux';
-import {productActions} from '@actions';
-import {userSelect} from '@selectors';
+import styles from './styles';
+import {ScrollView, View} from 'react-native';
+import {Styles} from '@configs';
+import {validate} from '@utils';
+import {useDispatch} from 'react-redux';
+import {reviewActions} from '@actions';
 
-export default function Feedback({navigation, route}) {
-  const {colors} = useTheme();
+export default function Index({navigation, route}) {
   const {t} = useTranslation();
+  const {theme} = useContext(Application);
+  const item = route.params?.item;
+
   const dispatch = useDispatch();
-  const user = useSelector(userSelect);
-  const offsetKeyboard = Platform.select({
-    ios: 0,
-    android: 20,
-  });
-  const [loading, setLoading] = useState(false);
-  const [rate, setRate] = useState(5);
-  const [review, setReview] = useState('');
-  const [success, setSuccess] = useState({
-    title: true,
-    review: true,
-  });
+  const [content, setContent] = useState('');
+  const [rate, setRate] = useState(item.rate);
+  const [error, setError] = useState();
 
   /**
-   * @description Called when user sumitted form
-   * @author Passion UI <passionui.com>
-   * @date 2019-08-03
+   * on change content
+   * @param value
    */
-  const onSubmit = () => {
-    if (review == '') {
-      setSuccess({
-        ...success,
-        review: review != '' ? true : false,
-      });
-    } else {
-      const params = {
-        post: route.params?.id,
-        rating: rate,
-        content: review,
-      };
-      setLoading(true);
-      dispatch(
-        productActions.onFeekBack(params, item => {
-          route.params.reload?.();
-          navigation.goBack();
-        }),
-      );
+  const onChangeContent = value => {
+    const valid = validate(value, {empty: false});
+    setError(valid);
+    setContent(value);
+  };
+
+  /**
+   * on feedback
+   */
+  const onFeedback = () => {
+    dispatch(
+      reviewActions.onAdd(
+        {
+          post: item.id,
+          content,
+          rating: rate,
+        },
+        ({success, message}) => {
+          if (success) {
+            route.params?.onResult();
+            navigation.goBack();
+          }
+          Toast.show(t(message));
+        },
+      ),
+    );
+  };
+
+  /**
+   * check disable feedback
+   */
+  const disableFeedback = () => {
+    const validContent = validate(content, {empty: false});
+    if (validContent) {
+      return true;
     }
   };
 
   return (
-    <SafeAreaView style={BaseStyle.safeAreaView} edges={['right', 'left']}>
-      <Header
-        title={t('feedback')}
-        renderLeft={() => {
-          return (
-            <Icon
-              name="arrow-left"
-              size={20}
-              color={colors.primary}
-              enableRTL={true}
-            />
-          );
-        }}
-        renderRight={() => {
-          if (loading) {
-            return <ActivityIndicator size="small" color={colors.primary} />;
-          }
-          return (
-            <Text headline primaryColor numberOfLines={1}>
-              {t('save')}
-            </Text>
-          );
-        }}
-        onPressLeft={() => {
-          navigation.goBack();
-        }}
-        onPressRight={() => {
-          onSubmit();
-        }}
-      />
-      <KeyboardAvoidingView
-        behavior={Platform.OS == 'android' ? 'height' : 'padding'}
-        keyboardVerticalOffset={offsetKeyboard}
-        style={{flex: 1}}>
-        <ScrollView contentContainerStyle={{alignItems: 'center', padding: 20}}>
-          <Image
-            source={{uri: user.image}}
-            style={{
-              width: 62,
-              height: 62,
-              borderRadius: 31,
-            }}
-          />
-          <View style={{width: 160}}>
-            <StarRating
-              starSize={26}
-              maxStars={5}
-              rating={rate}
-              selectedStar={rating => {
-                setRate(rating);
-              }}
-              fullStarColor={BaseColor.yellowColor}
-              containerStyle={{padding: 5}}
-            />
-            <Text caption1 grayColor style={{textAlign: 'center'}}>
-              {t('tap_to_rate')}
-            </Text>
-          </View>
-          <TextInput
-            style={{marginTop: 10, height: 150}}
-            onChangeText={text => setReview(text)}
-            textAlignVertical="top"
-            multiline={true}
-            success={success.review}
-            placeholder={t('input')}
-            value={review}
-          />
-        </ScrollView>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+    <ScreenContainer navigation={navigation} enableKeyboardAvoidingView={true}>
+      <ScrollView
+        style={Styles.flex}
+        contentContainerStyle={[
+          styles.container,
+          {backgroundColor: theme.colors.card},
+        ]}>
+        <Image style={styles.userImage} source={{uri: item?.author.image}} />
+        <SizedBox height={8} />
+        <Rating rate={item.rate} size={24} onFinishRating={setRate} />
+        <SizedBox height={4} />
+        <Text typography="subtitle" type="secondary">
+          {t('tap_to_rate')}
+        </Text>
+        <SizedBox height={24} />
+        <TextInput
+          numberOfLines={5}
+          defaultValue={content}
+          label={t('feedback')}
+          placeholder={t('input_feedback')}
+          onChangeText={onChangeContent}
+          onFocus={() => {
+            setError(null);
+          }}
+          onBlur={() => setContent(content)}
+          error={t(error)}
+          size="small"
+        />
+      </ScrollView>
+      <View style={Styles.buttonContent}>
+        <Button onPress={onFeedback} disabled={disableFeedback()}>
+          {t('feedback')}
+        </Button>
+      </View>
+    </ScreenContainer>
   );
 }

@@ -1,7 +1,22 @@
 export default class SortModel {
-  constructor(json) {
-    this.langKey = json?.lang_key;
-    this.field = json?.field;
-    this.value = json?.value;
+  constructor(data) {
+    this.title = data.title;
+    this.value = data.value;
+    this.field = data.field;
+  }
+
+  static fromJson(json) {
+    try {
+      if (typeof json !== 'object') {
+        throw 'json SortModel is not object';
+      }
+      return new SortModel({
+        title: json.lang_key ?? '',
+        value: json.value ?? '',
+        field: json.field ?? '',
+      });
+    } catch (e) {
+      console.log(e.toString());
+    }
   }
 }

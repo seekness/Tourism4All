@@ -1,263 +1,267 @@
-import React, {useState} from 'react';
-import {
-  FlatList,
-  RefreshControl,
-  View,
-  ActivityIndicator,
-  TouchableOpacity,
-} from 'react-native';
-import {BaseStyle, useTheme} from '@config';
-import {Header, SafeAreaView, ListItem, Text, Icon} from '@components';
-import {wishlistSelect} from '@selectors';
+import React, {useContext, useMemo, useRef, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {useTranslation} from 'react-i18next';
-import {wishListActions} from '@actions';
-import Share from 'react-native-share';
-import Modal from 'react-native-modal';
+import {
+  Application,
+  BottomSheetView,
+  Divider,
+  Empty,
+  Icon,
+  IconButton,
+  ListItem,
+  ProductItem,
+  ScreenContainer,
+  SizedBox,
+  Toast,
+} from '@components';
+import {FlatList, RefreshControl, Share, View} from 'react-native';
+import {wishlistActions} from '@actions';
+import {wishlistSelect} from '@selectors';
+import {Setting, Styles} from '@configs';
 import styles from './styles';
+import {useTranslation} from 'react-i18next';
+import Navigator from '@navigator';
 
-export default function Wishlist({navigation}) {
-  let disableEndReached;
-
+export default function WishList({navigation}) {
+  const {theme} = useContext(Application);
   const {t} = useTranslation();
-  const {colors} = useTheme();
+  const bottomFullRef = useRef();
+  const bottomLimitRef = useRef();
+  const selectedRef = useRef();
+
+  const [refreshing, setRefreshing] = useState(false);
   const dispatch = useDispatch();
   const wishlist = useSelector(wishlistSelect);
-  const [modalVisible, setModalVisible] = useState(false);
-
-  const [refreshing, setRefresh] = useState(false);
-  const [loadingMore, setLoadingMore] = useState(false);
-  const [deleting, setDeleting] = useState(false);
-  const [actionItem, setActionItem] = useState(null);
 
   /**
-   * Reload wishlist
+   * on refresh
    */
-  const onRefresh = () => {
-    setRefresh(true);
+  const onRefresh = async () => {
+    setRefreshing(true);
     dispatch(
-      wishListActions.onLoad(null, () => {
-        setRefresh(false);
+      wishlistActions.onLoad(() => {
+        setRefreshing(false);
       }),
     );
   };
 
   /**
-   * Loadmore action
+   * on press product
    */
-  const onLoadMore = () => {
-    if (!disableEndReached) {
-      if (wishlist.pagination?.allowLoadMore && !loadingMore) {
-        setLoadingMore(true);
-        const page = wishlist.pagination.page + 1;
-        dispatch(
-          wishListActions.onLoad({page}, () => {
-            setLoadingMore(false);
-          }),
-        );
-      }
-      disableEndReached = true;
+  const onPressProduct = item => {
+    navigation.navigate('ProductDetail', {item});
+  };
+
+  /**
+   * on clear wishlist
+   */
+  const onClear = () => {
+    dispatch(
+      wishlistActions.onClear(({message}) => {
+        Toast.show(t(message));
+      }),
+    );
+  };
+
+  /**
+   * on action
+   * @param item
+   */
+  const onAction = item => {
+    if (item.bookingUse) {
+      bottomFullRef.current?.present();
+    } else {
+      bottomLimitRef.current?.present();
     }
+    selectedRef.current = item;
   };
 
   /**
-   * Action Delete/Reset
+   * on booking item
    */
-  const onDelete = id => {
-    setDeleting(true);
+  const onBooking = item => {
+    bottomFullRef.current?.dismiss();
+    bottomLimitRef.current?.dismiss();
+    Navigator.navigateAuth('Booking', {item});
+  };
+
+  /**
+   * on delete wishlist
+   */
+  const onDelete = item => {
+    bottomFullRef.current?.dismiss();
+    bottomLimitRef.current?.dismiss();
     dispatch(
-      wishListActions.onDelete(id ? {post_id: id} : null, () => {
-        setDeleting(false);
+      wishlistActions.onDeleted(item, ({message}) => {
+        Toast.show(message);
       }),
     );
   };
 
   /**
-   * update status wishlist
-   * @param {*} item
-   */
-  const onUpdate = item => {
-    dispatch(wishListActions.onUpdate(item));
-  };
-
-  /**
-   * Action for share
+   * on share
    */
   const onShare = async item => {
-    const shareOptions = {
-      title: 'Share item',
-      url: item.link,
-    };
+    bottomFullRef.current?.dismiss();
+    bottomLimitRef.current?.dismiss();
     try {
-      Share.open(shareOptions);
-    } catch (error) {}
-    setModalVisible(false);
-  };
-
-  /**
-   * render UI Modal action
-   * @returns
-   */
-  const renderModal = () => {
-    return (
-      <Modal
-        isVisible={modalVisible}
-        onSwipeComplete={() => {
-          setModalVisible(false);
-          setActionItem(null);
-        }}
-        swipeDirection={['down']}
-        style={styles.bottomModal}>
-        <SafeAreaView
-          style={[styles.contentFilterBottom, {backgroundColor: colors.card}]}>
-          <View style={styles.contentSwipeDown}>
-            <View style={styles.lineSwipeDown} />
-          </View>
-          <TouchableOpacity
-            style={styles.closeModalButton}
-            onPress={() => {
-              setModalVisible(false);
-              setActionItem(null);
-            }}>
-            <Icon name="times" size={12} color={colors.text} />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              onShare(actionItem);
-            }}
-            style={[
-              styles.contentActionModalBottom,
-              {borderBottomColor: colors.border, borderBottomWidth: 1},
-            ]}>
-            <Icon name="share" size={18} color={colors.text} />
-            <Text body2 semibold style={{marginLeft: 15}}>
-              {t('share')}
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.contentActionModalBottom]}
-            onPress={() => {
-              setModalVisible(false);
-              onDelete(actionItem.id);
-            }}>
-            <Icon name="trash-alt" size={18} color={colors.text} />
-            <Text body2 semibold style={{marginLeft: 15}}>
-              {t('remove')}
-            </Text>
-          </TouchableOpacity>
-        </SafeAreaView>
-      </Modal>
-    );
-  };
-
-  /**
-   * render content wishlist
-   * @returns
-   */
-  const renderContent = () => {
-    if (wishlist.list) {
-      return (
-        <FlatList
-          contentContainerStyle={{paddingTop: 15, flex: 1}}
-          style={styles.contentList}
-          refreshControl={
-            <RefreshControl
-              colors={[colors.primary]}
-              tintColor={colors.primary}
-              refreshing={refreshing}
-              onRefresh={onRefresh}
-            />
-          }
-          data={wishlist.list}
-          keyExtractor={(item, index) => item.id}
-          onEndReachedThreshold={0.5}
-          onEndReached={onLoadMore}
-          onMomentumScrollBegin={() => {
-            disableEndReached = false;
-          }}
-          renderItem={({item, index}) => (
-            <ListItem
-              small
-              enableAction={true}
-              image={item.image?.full}
-              title={item.title}
-              subtitle={item.category?.title}
-              rate={item.rate}
-              style={{marginBottom: 15}}
-              onPress={() =>
-                navigation.navigate('ProductDetail', {
-                  id: item.id,
-                  onLike: favorite => {
-                    item.favorite = favorite;
-                    onUpdate(item);
-                  },
-                })
-              }
-              omPressMore={() => {
-                setActionItem(item);
-                setModalVisible(true);
-              }}
-            />
-          )}
-          ListEmptyComponent={
-            <View style={styles.loadingContent}>
-              <View style={{alignItems: 'center'}}>
-                <Icon
-                  name="frown-open"
-                  size={18}
-                  color={colors.text}
-                  style={{marginBottom: 4}}
-                />
-                <Text>{t('data_not_found')}</Text>
-              </View>
-            </View>
-          }
-          ListFooterComponent={
-            loadingMore ? (
-              <SafeAreaView style={styles.loadMoreContent}>
-                <ActivityIndicator size="small" color={colors.primary} />
-              </SafeAreaView>
-            ) : null
-          }
-        />
-      );
+      await Share.share({
+        title: item.title,
+        message: `Check out my item ${item.link}`,
+        subject: Setting.name,
+      });
+    } catch (e) {
+      Toast.show(e.message);
     }
+  };
 
+  /**
+   * on load more
+   */
+  const onMore = () => {
+    if (wishlist?.pagination?.allowMore) {
+      dispatch(wishlistActions.onLoadMore(() => {}));
+    }
+  };
+
+  /**
+   * render item list
+   * @param item
+   * @returns {JSX.Element}
+   */
+  const renderItem = ({item}) => {
     return (
-      <FlatList
-        contentContainerStyle={{paddingTop: 15}}
-        style={styles.contentList}
-        refreshControl={
-          <RefreshControl
-            colors={[colors.primary]}
-            tintColor={colors.primary}
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-          />
-        }
-        data={[1, 2, 3, 4, 5, 6, 7, 8]}
-        keyExtractor={(item, index) => item.toString()}
-        renderItem={({item, index}) => (
-          <ListItem small loading={true} style={{marginBottom: 15}} />
+      <View style={styles.item}>
+        <ProductItem
+          item={item}
+          onPress={() => onPressProduct(item)}
+          type="small"
+        />
+        <SizedBox width={4} />
+        {item?.id && (
+          <IconButton onPress={() => onAction(item)}>
+            <Icon name="dots-vertical" />
+          </IconButton>
         )}
-      />
+      </View>
     );
   };
+
+  /**
+   * render bottom sheet select full option
+   * @returns {JSX.Element}
+   */
+  const renderFullOptions = () => {
+    return (
+      <BottomSheetView ref={bottomFullRef}>
+        <View style={styles.bottomSheetContainer}>
+          <ListItem
+            title={t('booking')}
+            leading={<Icon name="bookmark-outline" />}
+            onPress={() => onBooking(selectedRef.current)}
+          />
+          <Divider />
+          <ListItem
+            title={t('share')}
+            leading={<Icon name="share-outline" />}
+            onPress={() => onShare(selectedRef.current)}
+          />
+          <Divider />
+          <ListItem
+            title={t('delete')}
+            leading={<Icon name="delete-outline" />}
+            onPress={() => onDelete(selectedRef.current)}
+          />
+        </View>
+      </BottomSheetView>
+    );
+  };
+
+  /**
+   * render bottom sheet select limit option
+   * @returns {JSX.Element}
+   */
+  const renderLimitOptions = () => {
+    return (
+      <BottomSheetView ref={bottomLimitRef}>
+        <View style={styles.bottomSheetContainer}>
+          <ListItem
+            title={t('share')}
+            leading={<Icon name="share-outline" />}
+            onPress={() => onShare(selectedRef.current)}
+          />
+          <Divider />
+          <ListItem
+            title={t('delete')}
+            leading={<Icon name="delete-outline" />}
+            onPress={() => onDelete(selectedRef.current)}
+          />
+        </View>
+      </BottomSheetView>
+    );
+  };
+
+  /**
+   * render data for list
+   * @type {unknown}
+   */
+  const data = useMemo(() => {
+    if (wishlist.data) {
+      if (wishlist.pagination.allowMore) {
+        return [...wishlist.data, ...[{}]];
+      }
+      return wishlist.data;
+    } else {
+      return Array.from({length: 10}, () => {
+        return {};
+      });
+    }
+  }, [wishlist]);
 
   return (
-    <SafeAreaView style={BaseStyle.safeAreaView} edges={['right', 'left']}>
-      <Header
-        title={t('wishlist')}
-        renderRight={() => {
-          if (deleting) {
-            return <ActivityIndicator size="small" color={colors.primary} />;
-          }
-          return <Icon name="trash-alt" size={16} color={colors.text} />;
-        }}
-        onPressRight={() => onDelete()}
+    <ScreenContainer
+      edges={['left', 'right']}
+      navigation={navigation}
+      options={{
+        headerRight: () => {
+          return (
+            <View style={Styles.rightButton}>
+              <IconButton onPress={onClear} size="small">
+                <Icon name="delete-empty-outline" />
+              </IconButton>
+            </View>
+          );
+        },
+      }}>
+      {renderFullOptions()}
+      {renderLimitOptions()}
+      <FlatList
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            tintColor={theme.colors.text}
+            title={t('pull_to_reload')}
+            titleColor={theme.colors.text}
+            colors={[theme.colors.primary]}
+            progressBackgroundColor={theme.colors.card}
+          />
+        }
+        ListEmptyComponent={
+          <Empty
+            style={Styles.flex}
+            title={t('not_found_matching')}
+            message={t('please_try_again')}
+            button={{title: t('try_again'), onPress: onRefresh}}
+          />
+        }
+        data={data}
+        renderItem={renderItem}
+        keyExtractor={(item, index) => `${item?.id}${index}`}
+        onEndReachedThreshold={0.1}
+        onEndReached={onMore}
+        style={Styles.flex}
+        contentContainerStyle={styles.listContainer}
       />
-      {renderModal()}
-      {renderContent()}
-    </SafeAreaView>
+    </ScreenContainer>
   );
 }

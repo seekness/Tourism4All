@@ -1,69 +1,68 @@
-import React, {useEffect} from 'react';
-import {ActivityIndicator, View, Alert} from 'react-native';
-import {Images, useTheme, BaseSetting} from '@config';
-import {configActions} from '@actions';
-import {useDispatch, useSelector} from 'react-redux';
-import {Image, Text} from '@components';
-import {userSelect} from '@selectors';
-
+import React, {
+  useImperativeHandle,
+  useState,
+  forwardRef,
+  useEffect,
+  useRef,
+} from 'react';
+import {CircleSnail} from 'react-native-progress';
+import {View, BackHandler} from 'react-native';
+import {Colors} from '@configs';
 import styles from './styles';
 
-export default function Loading({navigation}) {
-  const dispatch = useDispatch();
-  const {colors} = useTheme();
-  const user = useSelector(userSelect);
+export default forwardRef((props, ref) => {
+  const timeout = useRef();
+  const [visible, setVisible] = useState(false);
 
-  /**
-   *
-   * Override Alert
-   */
-  Alert.alert = ({title, message, action, option, type}) => {
-    navigation.navigate('Alert', {
-      type: type ?? 'warning',
-      title: title ?? '',
-      message: message ?? '',
-      action,
-      option: option ?? {cancelable: true},
-    });
-  };
-
-  /**
-   *
-   * Process when open app
-   */
+  useImperativeHandle(ref, () => ({
+    showLoading,
+  }));
 
   useEffect(() => {
-    dispatch(
-      configActions.onSetup(BaseSetting.domain, user, response => {
-        navigation.replace('Main');
-      }),
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      () => {
+        return visible;
+      },
     );
-  }, [dispatch, navigation, user]);
+    return () => {
+      backHandler.remove();
+    };
+  }, [visible]);
 
-  return (
-    <View style={styles.container}>
-      <View style={{alignItems: 'center'}}>
-        <Image source={Images.logo} style={styles.logo} resizeMode="contain" />
-        <Text title1 style={{marginTop: 8}}>
-          {BaseSetting.displayName}
-        </Text>
-        {/* <Text headline primaryColor style={{marginTop: 8}}>
-          LIST DIRECTORY
-        </Text> */}
+  /**
+   * show/hidden loading
+   * @param loading
+   * @param options
+   * @param callback
+   */
+  const showLoading = ({
+    loading = false,
+    options = {duration: 30000},
+    callback = () => {},
+  }) => {
+    setVisible(loading);
+    if (loading) {
+      clearTimeout(timeout.current);
+      timeout.current = setTimeout(() => {
+        setVisible(false);
+      }, options?.duration);
+    }
+    callback?.();
+  };
+
+  if (visible) {
+    return (
+      <View style={styles.container}>
+        <CircleSnail
+          spinDuration={2000}
+          indeterminate
+          color={Colors.white}
+          size={64}
+        />
       </View>
-      <ActivityIndicator
-        size="large"
-        color={colors.text}
-        style={{
-          position: 'absolute',
-          top: 260,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      />
-    </View>
-  );
-}
+    );
+  }
+
+  return null;
+});

@@ -38,7 +38,7 @@ const Index = props => {
               {item.title}
             </Text>
             <Text typography="subtitle" type="secondary">
-              {item.category?.title}
+              {t(item.category?.title)}
             </Text>
             <SizedBox height={4} />
             <View style={Styles.row}>
@@ -122,7 +122,7 @@ const Index = props => {
           </View>
           <SizedBox height={8} />
           <Text typography="subtitle" type="secondary">
-            {item.category?.title}
+            {t(item.category?.title)}
           </Text>
           <SizedBox height={4} />
           <Text typography="title" weight="bold">
@@ -215,7 +215,7 @@ const Index = props => {
           />
           <View style={styles.listContent}>
             <Text typography="subtitle" type="secondary">
-              {item.category?.title}
+              {t(item.category?.title)}
             </Text>
             <SizedBox height={4} />
             <Text typography="title" weight="bold">
@@ -360,7 +360,7 @@ const Index = props => {
             <View style={styles.rowPrice}>
               <View style={Styles.flex}>
                 <Text typography="subtitle" type="secondary">
-                  {item.category?.title}
+                  {t(item.category?.title)}
                 </Text>
                 <SizedBox height={4} />
                 <Text typography="title" weight="bold">

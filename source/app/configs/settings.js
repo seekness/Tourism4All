@@ -16,8 +16,8 @@ export const Setting = {
     light: {
       mode: 'light',
       colors: {
-        primary: '#e5634d',
-        secondary: '#4a91a4',
+        primary: '#4f9ec9',
+        secondary: '#de7002',
         background: '#f9f9f9',
         card: '#ffffff',
         text: '#303233',
@@ -29,8 +29,8 @@ export const Setting = {
     dark: {
       mode: 'dark',
       colors: {
-        primary: '#e5634d',
-        secondary: '#4a91a4',
+        primary: '#4f9ec9',
+        secondary: '#de7002',
         background: '#171819',
         card: '#202122',
         text: '#e4e6eb',
@@ -59,8 +59,8 @@ export const Setting = {
       dark: {
         mode: 'dark',
         colors: {
-          primary: '#e5634d',
-          secondary: '#4a91a4',
+          primary: '#4f9ec9',
+          secondary: '#de7002',
           background: '#171819',
           card: '#202122',
           text: '#e4e6eb',
@@ -71,12 +71,12 @@ export const Setting = {
       },
     },
     {
-      id: 'orange',
+      id: 'blue',
       light: {
         mode: 'light',
         colors: {
-          primary: '#f4a261',
-          secondary: '#a5d6a7',
+          primary: '#4f9ec9',
+          secondary: '#de7002',
           background: '#f9f9f9',
           card: '#ffffff',
           text: '#303233',
@@ -88,8 +88,8 @@ export const Setting = {
       dark: {
         mode: 'dark',
         colors: {
-          primary: '#f4a261',
-          secondary: '#a5d6a7',
+          primary: '#4f9ec9',
+          secondary: '#de7002',
           background: '#171819',
           card: '#202122',
           text: '#e4e6eb',

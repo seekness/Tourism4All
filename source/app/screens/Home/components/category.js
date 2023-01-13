@@ -36,10 +36,10 @@ export default function Categories(props) {
                 </View>
                 <Text
                   typography="caption"
-                  style={t(styles.title)}
+                  style={styles.title}
                   numberOfLines={2}
                   ellipsizeMode="middle">
-                  {item.title}
+                  {t(item.title)}
                 </Text>
               </Pressable>
             ))}

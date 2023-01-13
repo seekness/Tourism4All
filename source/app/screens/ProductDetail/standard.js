@@ -841,7 +841,7 @@ export default function Index({navigation, route}) {
                   }
                   style={styles.tagItem}
                   textStyle={{color: theme.colors.secondary}}>
-                  {item.title}
+                  {t(item.title)}
                 </Chip>
               );
             })}
@@ -872,7 +872,7 @@ export default function Index({navigation, route}) {
                   key={item.id}
                   style={styles.tagItem}
                   textStyle={{color: theme.colors.secondary}}>
-                  {item.title}
+                  {t(item.title)}
                 </Chip>
               );
             })}

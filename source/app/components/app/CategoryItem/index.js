@@ -89,7 +89,7 @@ const Index = props => {
             <SizedBox width={8} />
             <View>
               <Text typography="title" weight="bold" color="white">
-                {item.title}
+                {t(item.title)}
               </Text>
               <SizedBox height={2} />
               <Text typography="caption" color="white">

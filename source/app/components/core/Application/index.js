@@ -4,8 +4,8 @@ const defaultContext = {
   theme: {
     mode: 'light',
     colors: {
-      primary: '#e5634d',
-      secondary: '#4a91a4',
+      primary: '#4f9ec9',
+      secondary: '#de7002',
       background: '#f9f9f9',
       card: '#ffffff',
       text: '#303233',

@@ -98,13 +98,13 @@ export default function OnBoard({navigation, route}) {
   const renderItem = ({item}) => {
     return (
       <View style={[Styles.flexCenter, Styles.padding16]}>
-        <Image source={item.image} style={styles.image} resizeMode="cover" />
-        <Text typography="h3" weight="bold" style={styles.textTitle}>
+        <Image source={item.image} style={styles.image} resizeMode="contain" />
+        {/* <Text typography="h3" weight="bold" style={styles.textTitle}>
           {t(item.title)}
         </Text>
         <Text typography="title" style={styles.textSubtitle}>
           {t(item.subtitle)}
-        </Text>
+        </Text> */}
       </View>
     );
   };

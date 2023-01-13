@@ -102,7 +102,7 @@ export default function Discovery({navigation}) {
             </View>
             <View style={Styles.paddingHorizontal8}>
               <Text typography="title" weight="bold">
-                {item.category?.title}
+                {t(item.category?.title)}
               </Text>
               <SizedBox height={4} />
               <Text typography="caption" type="secondary">

@@ -21,7 +21,7 @@ export default function Splash({navigation}) {
   }, [dispatch, navigation]);
 
   return (
-    <View style={[styles.container, {backgroundColor: theme.colors.primary}]}>
+    <View style={[styles.container, {backgroundColor: Colors.white}]}>
       <View style={styles.contentLogo}>
         <View style={styles.logo}>
           <Image

@@ -103,7 +103,7 @@ export default function Index({navigation, route}) {
       navigation={navigation}
       style={{backgroundColor: theme.colors.card}}
       options={{
-        title: route.params?.item?.title ?? t('category'),
+        title: t(route.params?.item?.title) ?? t('category'),
         headerRight: () => {
           return (
             <View style={Styles.nativeRightButton}>

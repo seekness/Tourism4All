@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:431280419532:android:84761c1e5d0865dfe00869",
         "android_client_info": {
-          "package_name": "com.listarPro"
+          "package_name": "com.Tourism4All"
         }
       },
       "oauth_client": [
@@ -34,7 +34,7 @@
               "client_id": "431280419532-3fuv2sfbvd2sqc23fsug8bvcvd8muvbi.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.huynh.listarPro"
+                "bundle_id": "com.huynh.Tourism4All"
               }
             }
           ]

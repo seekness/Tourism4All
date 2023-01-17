@@ -60,7 +60,7 @@ static NSString *const kRNConcurrentRoot = @"concurrentRoot";
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
   [FIRApp configure];
-  [GMSServices provideAPIKey:@"AIzaSyDg1evvc68xACuU2RsbBiV5uoF0vwVNM8Y"];
+  [GMSServices provideAPIKey:@"AIzaSyAaSavroN1gDnfp12VPAAFvXKdxUwaDlPA"];
   [RNSplashScreen show];
   return YES;
 }

@@ -300,5 +300,22 @@
   "scan_to_detail_booking": "Scan to get detail booking",
   "listing_style": "Listing Style",
   "basic": "Basic",
-  "real_estate": "Real Estate"
+  "real_estate": "Real Estate",
+  "Nature": "Nature",
+  "Accommodation": "Accommodation",
+  "Events": "Events",
+  "Info Servis": "Info Servis",
+  "Sport": "Sport",
+  "Culture": "Culture",
+  "Routes": "Routes",
+  "Caffe": "Caffe",
+  "Restaurant": "Restaurant",
+  "Appartments": "Appartments",
+  "Hotels": "Hotels",
+  "Rooms": "Rooms",
+  "Churches": "Churches",
+  "Institutions": "Institutions",
+  "Landmarks": "Landmarks",
+  "Museums": "Museums",
+  "Caffe and Restaurants": "Caffe and Restaurants"
 }
